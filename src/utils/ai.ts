@@ -1,5 +1,5 @@
-import { delay } from './delay';
-import { mockAi } from '../data/mockAi';
+import { delay } from '@/utils/delay';
+import { mockAi } from '@/data/mockAi';
 
 export const getAiSummary = async () => {
   await delay(1000);

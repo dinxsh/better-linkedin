@@ -1,6 +1,6 @@
-import { Profile } from '../components/Profile';
-import { AiInsights } from '../components/AiInsights';
-import { mockProfile } from '../data/mockProfile';
+import { Profile } from '@/components/Profile';
+import { AiInsights } from '@/components/AiInsights';
+import { mockProfile } from '@/data/mockProfile';
 
 export default function Home() {
   return (

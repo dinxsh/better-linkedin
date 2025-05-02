@@ -1,4 +1,4 @@
-import { ProfileData } from '../data/mockProfile';
+import { ProfileData } from '@/data/mockProfile';
 
 interface ProfileProps {
   data: ProfileData;

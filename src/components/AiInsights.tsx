@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getAiSummary, getAiSkill, getAiOutreach, getAiJobs } from '../utils/ai';
+import { getAiSummary, getAiSkill, getAiOutreach, getAiJobs } from '@/utils/ai';
 
 export const AiInsights = () => {
   const [summary, setSummary] = useState<string>('');

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react';
 import { getAiSummary, getAiSkill, getAiOutreach, getAiJobs } from '@/utils/ai';
 
@@ -10,7 +12,7 @@ export const AiInsights = () => {
 
   const generateInsights = async () => {
     setLoading(true);
-    try {
+    try {   
       const [summaryData, skillData, outreachData, jobsData] = await Promise.all([
         getAiSummary(),
         getAiSkill(),
@@ -74,4 +76,4 @@ export const AiInsights = () => {
       )}
     </div>
   );
-}; 
+};

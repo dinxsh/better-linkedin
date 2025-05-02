@@ -1,9 +1,3 @@
----
-
-> **Smarter Job Search. Personalized Career Insights. Right in Your LinkedIn Experience.**
-
----
-
 ### Better Linkedin
 
 a browser-simulated enhancement that transforms the traditional LinkedIn interface into a **smart, AI-augmented career dashboard**.

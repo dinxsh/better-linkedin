@@ -289,7 +289,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           <SidebarSection
             title="Suggested Next Skill"
             content={loaded ? (
-              <span className="inline-block bg-blue-50 text-blue-800 px-3 py-1.5 rounded-full text-[15px] cursor-pointer hover:bg-blue-100 transition" title="Learning GraphQL will help you become a full-stack engineer.">{aiContent.skill}</span>
+              <span className="inline-block px-3 py-1.5 rounded-full text-[15px] cursor-pointer" title="Learning GraphQL will help you become a full-stack engineer.">{aiContent.skill}</span>
             ) : (
               <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse mb-2" />
             )}
@@ -372,7 +372,14 @@ function JobTailoringDemo({ onGenerate }: { onGenerate: (type: string, input?: s
       >
         {loading ? 'Tailoring...' : 'Tailor'}
       </button>
-      {result && <div className="mt-2 text-[15px] text-green-700">{result}</div>}
+      {result && (
+        <textarea
+          className="w-full border rounded p-2 text-[15px] mt-2 resize-y overflow-y-auto"
+          style={{ minHeight: '60px', maxHeight: '200px' }}
+          value={result}
+          readOnly
+        />
+      )}
     </div>
   );
 }
@@ -399,7 +406,14 @@ function CoverLetterDemo({ onGenerate }: { onGenerate: (type: string, input?: st
       >
         {loading ? 'Generating...' : 'Generate'}
       </button>
-      {result && <pre className="mt-2 text-[15px] text-green-700 whitespace-pre-line">{result}</pre>}
+      {result && (
+        <textarea
+          className="w-full border rounded p-2 text-[15px] mt-2 resize-y overflow-y-auto"
+          style={{ minHeight: '60px', maxHeight: '200px' }}
+          value={result}
+          readOnly
+        />
+      )}
     </div>
   );
 }
@@ -430,7 +444,14 @@ function LearningPathDemo({ onGenerate }: { onGenerate: (type: string, input?: s
       >
         {loading ? 'Generating...' : 'Suggest Path'}
       </button>
-      {result && <pre className="mt-2 text-[15px] text-purple-700 whitespace-pre-line">{result}</pre>}
+      {result && (
+        <textarea
+          className="w-full border rounded p-2 text-[15px] mt-2 resize-y overflow-y-auto"
+          style={{ minHeight: '60px', maxHeight: '200px' }}
+          value={result}
+          readOnly
+        />
+      )}
     </div>
   );
 }
@@ -455,7 +476,14 @@ function NetworkGapDemo({ onGenerate }: { onGenerate: (type: string, input?: str
       >
         {loading ? 'Analyzing...' : 'Analyze Network'}
       </button>
-      {result && <div className="mt-2 text-[15px] text-orange-700">{result}</div>}
+      {result && (
+        <textarea
+          className="w-full border rounded p-2 text-[15px] mt-2 resize-y overflow-y-auto"
+          style={{ minHeight: '60px', maxHeight: '200px' }}
+          value={result}
+          readOnly
+        />
+      )}
     </div>
   );
 }
@@ -482,7 +510,14 @@ function CareerTrackerDemo({ onGenerate }: { onGenerate: (type: string, input?: 
       >
         {loading ? 'Generating...' : 'Track'}
       </button>
-      {result && <div className="mt-2 text-[15px] text-pink-700">{result}</div>}
+      {result && (
+        <textarea
+          className="w-full border rounded p-2 text-[15px] mt-2 resize-y overflow-y-auto"
+          style={{ minHeight: '60px', maxHeight: '200px' }}
+          value={result}
+          readOnly
+        />
+      )}
     </div>
   );
 } 

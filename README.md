@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+---
 
-## Getting Started
+> **Smarter Job Search. Personalized Career Insights. Right in Your LinkedIn Experience.**
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Better Linkedin
+
+a browser-simulated enhancement that transforms the traditional LinkedIn interface into a **smart, AI-augmented career dashboard**.
+
+This assistant lives in a collapsible right-side panel and provides:
+
+* 🎯 Tailored job recommendations
+* 🧠 Skill gap analysis (based on your profile vs target jobs)
+* ✍️ Resume & headline rewrites
+* 📊 Career path suggestions based on similar professionals
+
+This project was built for the Level Up: Vibe Coding Hackathon 2025, focused on enhancing real-world websites with powerful features.
+
+---
+
+## 💡 Key Features
+
+| Feature                            | Description                                                              |
+| ---------------------------------- | ------------------------------------------------------------------------ |
+| 🧠 **AI Career Assistant Sidebar** | Always-visible panel enhancing the LinkedIn UI                           |
+| 📈 **Job Fit Analyzer**            | Matches your LinkedIn profile with job descriptions and scores alignment |
+| 🕳️ **Skill Gap Highlighter**      | Detects and displays missing skills or certifications                    |
+| ✍️ **Headline & Summary Rewriter** | AI-generated professional rewrites of your LinkedIn headline/about       |
+| 🔮 **Career Path Predictor**       | Shows real paths taken by people like you using mock career graphing     |
+| 📝 **One-click Resume Feedback**   | Upload your resume and get AI-powered suggestions (mocked in demo)       |
+
+---
+
+## 🎥 Demo
+
+> [🔗 Live Demo on Vercel](https://better-linkedin.vercel.app/)
+
+---
+
+## 🛠 Tech Stack
+
+* **Frontend**: React + TypeScript
+* **Styling**: Tailwind CSS
+* **UI Framework**: ShadCN (Radix UI)
+* **AI**: OpenAI API (mocked with static JSON for hackathon)
+* **Deployment**: Vercel
+* **Icons**: Lucide
+
+---
+
+## 📂 Folder Structure
+
+```
+/src
+  ├── components/
+  │   ├── Sidebar.tsx            # Main assistant panel
+  │   ├── SkillGap.tsx           # Skill analysis display
+  │   ├── JobFitScore.tsx        # Job matching component
+  │   ├── ResumeFeedback.tsx     # Upload + feedback UI
+  │   └── HeadlineRewriter.tsx   # Rewriting section
+  ├── data/
+  │   ├── mockJobs.ts            # Sample job listings
+  │   ├── mockProfile.ts         # Simulated LinkedIn profile data
+  │   └── mockRecommendations.ts # Static AI suggestions
+  ├── utils/
+  │   └── aiUtils.ts             # Mocked GPT calls and logic
+  ├── App.tsx
+  └── index.tsx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ How to Run Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Clone the repo
+git clone https://github.com/dinxsh/better-linkedin
+cd better-linkedin
 
-## Learn More
+# 2. Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Start development server
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The app will open at [http://localhost:3000](http://localhost:3000)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧪 Mock Data Details
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Since real LinkedIn APIs are restricted, all data (profile, jobs, AI output) is **mocked with JSON files** and simulates real-world interaction.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Mocked                        | Data Source              |
+| ----------------------------- | ------------------------ |
+| LinkedIn Profile              | `mockProfile.ts`         |
+| Job Descriptions              | `mockJobs.ts`            |
+| GPT Output (skills, rewrites) | `mockRecommendations.ts` |
+
+---
+
+## 🏁 Future Work
+
+* Real-time LinkedIn scraping (with user consent)
+* Live OpenAI API integration
+* Browser extension version
+* Resume parsing and smart alerts
+
+---
+
+## 🧑‍💻 Author
+
+**Built by** [Dinesh Talwadker](https://www.linkedin.com/in/dineshtalwadker)
+🎓 Hackathon submission for **Level Up: Vibe Coding Hackathon 2025**
+🛠 Powered by [Cursor](https://cursor.sh) + [Vercel](https://vercel.com)
+
+---
+
+## 📜 License
+
+MIT License — free to use and modify.

@@ -73,8 +73,8 @@ export interface ProfileDataFull {
 }
 
 export const mockProfileFull: ProfileDataFull = {
-  coverImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80", // Unsplash office
-  avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg", // Placeholder avatar
+  coverImageUrl: "https://media.licdn.com/dms/image/v2/D4D16AQFR-NKYSQ8Lag/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1732320574744?e=1751500800&v=beta&t=8xxHCZdEg4GKKUNTXbdi92OuQOnEV8C_bEtGkZrF2iA", // Unsplash office
+  avatarUrl: "https://media.licdn.com/dms/image/v2/D5635AQHPXVgYJZSvfw/profile-framedphoto-shrink_800_800/B56ZY0.wLnGsAg-/0/1744645588109?e=1746824400&v=beta&t=k2jvZJPtHdUOY1DaSvdrGILJHvBfe9WEPctsI7ohB0E", // Placeholder avatar
   name: "Dinesh Talwadker",
   headline: "Indie hacker building products, experimenting with crypto & AI Agents",
   location: "Ahmedabad, Gujarat, India",

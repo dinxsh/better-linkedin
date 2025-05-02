@@ -8,13 +8,13 @@ export function ExperienceSection() {
         {mockProfileFull.experience.map(exp => (
           <div key={exp.company + exp.role} className="flex gap-4">
             {exp.logoUrl && (
-              <img src={exp.logoUrl} alt={exp.company} className="h-12 w-12 rounded object-contain border" />
+              <img src={exp.logoUrl} alt={exp.company} className="h-12 w-12 rounded object-contain border border-gray-200" />
             )}
-            <div>
-              <div className="font-semibold text-gray-900">{exp.role}</div>
-              <div className="text-gray-700">{exp.company} <span className="text-gray-500">· {exp.duration}</span></div>
-              <div className="text-gray-500 text-sm">{exp.location}</div>
-              <div className="text-gray-800 mt-1 text-sm">{exp.description}</div>
+            <div className="flex-1">
+              <div className="font-semibold text-gray-900 text-[15px]">{exp.role}</div>
+              <div className="text-gray-700 text-[15px]">{exp.company} <span className="text-gray-500">· {exp.duration}</span></div>
+              <div className="text-gray-500 text-[13px]">{exp.location}</div>
+              <div className="text-gray-800 mt-2 text-[15px] leading-relaxed">{exp.description}</div>
             </div>
           </div>
         ))}

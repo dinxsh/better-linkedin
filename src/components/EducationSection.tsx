@@ -8,12 +8,12 @@ export function EducationSection() {
         {mockProfileFull.education.map(edu => (
           <div key={edu.school} className="flex gap-4">
             {edu.logoUrl && (
-              <img src={edu.logoUrl} alt={edu.school} className="h-12 w-12 rounded object-contain border" />
+              <img src={edu.logoUrl} alt={edu.school} className="h-12 w-12 rounded object-contain border border-gray-200" />
             )}
-            <div>
-              <div className="font-semibold text-gray-900">{edu.school}</div>
-              <div className="text-gray-700">{edu.degree}, {edu.field}</div>
-              <div className="text-gray-500 text-sm">{edu.duration}</div>
+            <div className="flex-1">
+              <div className="font-semibold text-gray-900 text-[15px]">{edu.school}</div>
+              <div className="text-gray-700 text-[15px]">{edu.degree}, {edu.field}</div>
+              <div className="text-gray-500 text-[13px]">{edu.duration}</div>
             </div>
           </div>
         ))}

@@ -6,7 +6,7 @@ export function SkillsSection() {
       <h2 className="text-xl font-semibold text-gray-900 mb-4">Skills</h2>
       <div className="flex flex-wrap gap-2">
         {mockProfileFull.skills.map(skill => (
-          <span key={skill} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-800 border border-gray-200">
+          <span key={skill} className="bg-gray-100 px-3 py-1.5 rounded-full text-[15px] text-gray-800 border border-gray-200 hover:bg-gray-200 transition-colors">
             {skill}
           </span>
         ))}

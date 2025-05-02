@@ -22,7 +22,7 @@ export function Header() {
         {/* Navigation */}
         <nav className="flex items-center space-x-1 md:space-x-4">
           <NavItem icon={<HomeIcon />} label="Home" active />
-          <NavItem icon={<NetworkIcon />} label="My Network" notification={1} />
+          <NavItem icon={<NetworkIcon />} label="Network" notification={1} />
           <NavItem icon={<JobsIcon />} label="Jobs" />
           <NavItem icon={<MessagingIcon />} label="Messaging" />
           <NavItem icon={<NotificationsIcon />} label="Notifications" notification={3} />

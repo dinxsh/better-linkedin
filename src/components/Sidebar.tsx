@@ -5,6 +5,7 @@ import { mockAi } from '@/data/mockAi';
 import { mockProfileFull } from '@/data/mockProfileFull';
 import { SidebarSection } from './SidebarSection';
 import { JobCard } from './JobCard';
+import { generateContent, prompts } from '@/lib/gemini';
 
 const toolboxFeatures = [
   {
@@ -55,7 +56,39 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   const [outreach, setOutreach] = useState(mockAi.outreach);
   const [copied, setCopied] = useState(false);
   const [modal, setModal] = useState<string | null>(null);
+  const [aiContent, setAiContent] = useState({
+    summary: mockAi.summary,
+    skill: mockAi.skill,
+    jobs: mockAi.jobs
+  });
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Load AI content when sidebar opens
+  useEffect(() => {
+    if (isOpen && !loaded) {
+      const loadAiContent = async () => {
+        try {
+          const [summary, skill] = await Promise.all([
+            generateContent(prompts.careerSummary(mockProfileFull)),
+            generateContent(prompts.skillSuggestion(mockProfileFull))
+          ]);
+          
+          setAiContent(prev => ({
+            ...prev,
+            summary: summary || prev.summary,
+            skill: skill || prev.skill
+          }));
+          setLoaded(true);
+        } catch (error) {
+          console.error('Error loading AI content:', error);
+          setLoaded(true);
+        }
+      };
+
+      loadAiContent();
+    }
+    if (!isOpen) setLoaded(false);
+  }, [isOpen, loaded]);
 
   // Keyboard accessibility: ESC to close
   useEffect(() => {
@@ -69,14 +102,6 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose, modal]);
-
-  useEffect(() => {
-    if (isOpen && !loaded) {
-      const timer = setTimeout(() => setLoaded(true), 1500);
-      return () => clearTimeout(timer);
-    }
-    if (!isOpen) setLoaded(false);
-  }, [isOpen, loaded]);
 
   // Animation classes
   const sidebarClass = `fixed top-0 right-0 h-full w-full sm:w-[400px] bg-[#f8fafc] shadow-2xl z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} flex flex-col overflow-y-auto`;
@@ -122,6 +147,34 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
     { label: 'Connections', value: mockProfileFull.connections },
   ];
 
+  // Handle modal content generation
+  const handleModalAction = async (type: string, input?: string): Promise<string | null> => {
+    try {
+      let result;
+      switch (type) {
+        case 'job-tailoring':
+          result = await generateContent(prompts.jobTailoring(mockProfileFull, input || ''));
+          break;
+        case 'cover-letter':
+          result = await generateContent(prompts.coverLetter(mockProfileFull, input || ''));
+          break;
+        case 'learning-path':
+          result = await generateContent(prompts.learningPath(mockProfileFull, input || ''));
+          break;
+        case 'network-gap':
+          result = await generateContent(prompts.networkGap(mockProfileFull));
+          break;
+        case 'career-tracker':
+          result = await generateContent(prompts.careerTracker(mockProfileFull, input || ''));
+          break;
+      }
+      return result || null;
+    } catch (error) {
+      console.error('Error generating modal content:', error);
+      return null;
+    }
+  };
+
   return (
     <aside ref={sidebarRef} className={sidebarClass} style={{ boxShadow: 'rgba(0,0,0,0.15) -4px 0px 24px 0px' }}>
       {/* Sticky AI Header */}
@@ -148,6 +201,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           <div className="font-semibold text-gray-900 text-base text-center">{mockProfileFull.name}</div>
           <div className="text-xs text-gray-500 text-center mb-2">{mockProfileFull.headline}</div>
         </div>
+
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow border border-gray-100 flex justify-center gap-3 py-3 mb-2">
           {quickActions.map((action, i) => (
@@ -162,6 +216,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             </button>
           ))}
         </div>
+
         {/* Profile Stats */}
         <div className="bg-white rounded-xl shadow border border-gray-100 flex justify-around py-3 mb-2">
           {stats.map(stat => (
@@ -171,6 +226,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             </div>
           ))}
         </div>
+
         {/* AI Toolbox */}
         <div className="bg-white rounded-xl shadow border border-gray-100 p-4">
           <SidebarSection
@@ -184,13 +240,19 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                     onClick={() => setModal(feature.key)}
                   >
                     {feature.icon}
-                    <span className="font-medium text-gray-800 text-sm">{feature.label}</span>
+                    <span className="font-medium text-gray-800 text-[15px]">{feature.label}</span>
                   </button>
                 ))}
                 {/* Modal for feature details */}
                 {modal && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border border-blue-100">
+                  <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+                    onClick={() => setModal(null)}
+                  >
+                    <div 
+                      className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border border-blue-100"
+                      onClick={e => e.stopPropagation()}
+                    >
                       <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-blue-700 bg-gray-100 rounded-full p-1"
                         onClick={() => setModal(null)}
@@ -199,13 +261,13 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                         <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
                       </button>
                       <div className="mb-2 flex items-center gap-2">{toolboxFeatures.find(f => f.key === modal)?.icon}<span className="font-bold text-lg">{toolboxFeatures.find(f => f.key === modal)?.label}</span></div>
-                      <div className="text-gray-700 text-sm mb-4">{toolboxFeatures.find(f => f.key === modal)?.desc}</div>
+                      <div className="text-gray-700 text-[15px] mb-4">{toolboxFeatures.find(f => f.key === modal)?.desc}</div>
                       {/* Interactive UI for each feature */}
-                      {modal === 'job-tailoring' && <JobTailoringDemo />}
-                      {modal === 'cover-letter' && <CoverLetterDemo />}
-                      {modal === 'learning-path' && <LearningPathDemo />}
-                      {modal === 'network-gap' && <NetworkGapDemo />}
-                      {modal === 'career-tracker' && <CareerTrackerDemo />}
+                      {modal === 'job-tailoring' && <JobTailoringDemo onGenerate={handleModalAction} />}
+                      {modal === 'cover-letter' && <CoverLetterDemo onGenerate={handleModalAction} />}
+                      {modal === 'learning-path' && <LearningPathDemo onGenerate={handleModalAction} />}
+                      {modal === 'network-gap' && <NetworkGapDemo onGenerate={handleModalAction} />}
+                      {modal === 'career-tracker' && <CareerTrackerDemo onGenerate={handleModalAction} />}
                     </div>
                   </div>
                 )}
@@ -213,12 +275,13 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             }
           />
         </div>
+
         {/* AI Sections */}
         <div className="bg-white rounded-xl shadow border border-gray-100 p-4 space-y-6">
           <SidebarSection
             title="AI Career Summary"
             content={loaded ? (
-              <p className="text-gray-800 text-sm leading-relaxed">{mockAi.summary}</p>
+              <p className="text-gray-800 text-[15px] leading-relaxed">{aiContent.summary}</p>
             ) : (
               <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse mb-2" />
             )}
@@ -226,7 +289,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           <SidebarSection
             title="Suggested Next Skill"
             content={loaded ? (
-              <span className="inline-block bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-blue-100 transition" title="Learning GraphQL will help you become a full-stack engineer.">{mockAi.skill}</span>
+              <span className="inline-block bg-blue-50 text-blue-800 px-3 py-1.5 rounded-full text-[15px] cursor-pointer hover:bg-blue-100 transition" title="Learning GraphQL will help you become a full-stack engineer.">{aiContent.skill}</span>
             ) : (
               <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse mb-2" />
             )}
@@ -238,13 +301,13 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                 <div className="flex items-center gap-2 mb-2">
                   <button
                     onClick={handleCopy}
-                    className={`px-3 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium border border-gray-200 hover:bg-blue-100 focus:ring-2 focus:ring-blue-200 transition ${copied ? 'bg-green-100 text-green-700' : ''}`}
+                    className={`px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-[13px] font-medium border border-gray-200 hover:bg-blue-100 focus:ring-2 focus:ring-blue-200 transition ${copied ? 'bg-green-100 text-green-700' : ''}`}
                   >
                     {copied ? 'Copied!' : 'Copy'}
                   </button>
                 </div>
                 <textarea
-                  className="w-full border border-gray-200 rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  className="w-full border border-gray-200 rounded p-2 text-[15px] resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
                   rows={3}
                   value={outreach}
                   onChange={e => setOutreach(e.target.value)}
@@ -258,7 +321,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             title="Relevant Job Matches"
             content={loaded ? (
               <div>
-                {mockAi.jobs.map((job, i) => (
+                {aiContent.jobs.map((job, i) => (
                   <JobCard key={i} title={job.title} link={job.link} />
                 ))}
               </div>
@@ -286,61 +349,140 @@ function LinkedInIcon({ className = '' }) {
   return <svg className={className} fill="#0A66C2" viewBox="0 0 32 32"><rect fill="#0A66C2" x="0" y="0" width="32" height="32" rx="6"></rect><path d="M9 12h3v10H9zm1.5-2.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM14 12h2.8v1.2h.04c.39-.74 1.34-1.52 2.76-1.52C22.42 11.68 23 13.1 23 15.08V22h-3v-6c0-1.43-.02-3.27-2-3.27-2 0-2.3 1.56-2.3 3.17V22h-3V12z" fill="#fff"></path></svg>;
 }
 
-function JobTailoringDemo() {
+// Update demo components to use Gemini
+function JobTailoringDemo({ onGenerate }: { onGenerate: (type: string, input?: string) => Promise<string | null> }) {
   const [desc, setDesc] = useState('Frontend Developer at Stripe: Build UI components and collaborate with backend.');
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const response = await onGenerate('job-tailoring', desc);
+    setResult(response || 'Failed to generate tailored job description');
+    setLoading(false);
+  };
+
   return (
     <div>
-      <textarea className="w-full border rounded p-2 text-sm mb-2" rows={2} value={desc} onChange={e => setDesc(e.target.value)} />
-      <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm" onClick={() => setResult('Tailored for you: '+desc+' (with your React/AI skills highlighted!)')}>Tailor</button>
-      {result && <div className="mt-2 text-xs text-green-700">{result}</div>}
+      <textarea className="w-full border rounded p-2 text-[15px] mb-2" rows={2} value={desc} onChange={e => setDesc(e.target.value)} />
+      <button 
+        className="bg-blue-600 text-white px-3 py-1.5 rounded text-[15px] disabled:opacity-50" 
+        onClick={handleGenerate}
+        disabled={loading}
+      >
+        {loading ? 'Tailoring...' : 'Tailor'}
+      </button>
+      {result && <div className="mt-2 text-[15px] text-green-700">{result}</div>}
     </div>
   );
 }
-function CoverLetterDemo() {
+
+function CoverLetterDemo({ onGenerate }: { onGenerate: (type: string, input?: string) => Promise<string | null> }) {
   const [job, setJob] = useState('Frontend Developer at Stripe');
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const response = await onGenerate('cover-letter', job);
+    setResult(response || 'Failed to generate cover letter');
+    setLoading(false);
+  };
+
   return (
     <div>
-      <input className="w-full border rounded p-2 text-sm mb-2" value={job} onChange={e => setJob(e.target.value)} />
-      <button className="bg-green-600 text-white px-3 py-1 rounded text-sm" onClick={() => setResult('Dear Hiring Manager,\nI am excited to apply for '+job+'... (mocked cover letter)')}>Generate</button>
-      {result && <pre className="mt-2 text-xs text-green-700 whitespace-pre-line">{result}</pre>}
+      <input className="w-full border rounded p-2 text-[15px] mb-2" value={job} onChange={e => setJob(e.target.value)} />
+      <button 
+        className="bg-green-600 text-white px-3 py-1.5 rounded text-[15px] disabled:opacity-50" 
+        onClick={handleGenerate}
+        disabled={loading}
+      >
+        {loading ? 'Generating...' : 'Generate'}
+      </button>
+      {result && <pre className="mt-2 text-[15px] text-green-700 whitespace-pre-line">{result}</pre>}
     </div>
   );
 }
-function LearningPathDemo() {
+
+function LearningPathDemo({ onGenerate }: { onGenerate: (type: string, input?: string) => Promise<string | null> }) {
   const [goal, setGoal] = useState('Full Stack Developer');
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const response = await onGenerate('learning-path', goal);
+    setResult(response || 'Failed to generate learning path');
+    setLoading(false);
+  };
+
   return (
     <div>
-      <select className="w-full border rounded p-2 text-sm mb-2" value={goal} onChange={e => setGoal(e.target.value)}>
+      <select className="w-full border rounded p-2 text-[15px] mb-2" value={goal} onChange={e => setGoal(e.target.value)}>
         <option>Full Stack Developer</option>
         <option>Data Scientist</option>
         <option>Product Manager</option>
       </select>
-      <button className="bg-purple-600 text-white px-3 py-1 rounded text-sm" onClick={() => setResult('Step 1: Learn JS\nStep 2: Master React\nStep 3: Build projects\nStep 4: Apply for '+goal+' roles (mocked path)')}>Suggest Path</button>
-      {result && <pre className="mt-2 text-xs text-purple-700 whitespace-pre-line">{result}</pre>}
+      <button 
+        className="bg-purple-600 text-white px-3 py-1.5 rounded text-[15px] disabled:opacity-50" 
+        onClick={handleGenerate}
+        disabled={loading}
+      >
+        {loading ? 'Generating...' : 'Suggest Path'}
+      </button>
+      {result && <pre className="mt-2 text-[15px] text-purple-700 whitespace-pre-line">{result}</pre>}
     </div>
   );
 }
-function NetworkGapDemo() {
+
+function NetworkGapDemo({ onGenerate }: { onGenerate: (type: string, input?: string) => Promise<string | null> }) {
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const response = await onGenerate('network-gap');
+    setResult(response || 'Failed to analyze network gaps');
+    setLoading(false);
+  };
+
   return (
     <div>
-      <button className="bg-orange-600 text-white px-3 py-1 rounded text-sm mb-2" onClick={() => setResult('You have no Product Managers in your network! (mocked)')}>Analyze Network</button>
-      {result && <div className="mt-2 text-xs text-orange-700">{result}</div>}
+      <button 
+        className="bg-orange-600 text-white px-3 py-1.5 rounded text-[15px] mb-2 disabled:opacity-50" 
+        onClick={handleGenerate}
+        disabled={loading}
+      >
+        {loading ? 'Analyzing...' : 'Analyze Network'}
+      </button>
+      {result && <div className="mt-2 text-[15px] text-orange-700">{result}</div>}
     </div>
   );
 }
-function CareerTrackerDemo() {
+
+function CareerTrackerDemo({ onGenerate }: { onGenerate: (type: string, input?: string) => Promise<string | null> }) {
   const [goal, setGoal] = useState('Switch to Product Manager');
-  const [progress, setProgress] = useState(40);
+  const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const response = await onGenerate('career-tracker', goal);
+    setResult(response || 'Failed to generate career plan');
+    setLoading(false);
+  };
+
   return (
     <div>
-      <input className="w-full border rounded p-2 text-sm mb-2" value={goal} onChange={e => setGoal(e.target.value)} />
-      <button className="bg-pink-600 text-white px-3 py-1 rounded text-sm" onClick={() => setProgress(progress+10)}>Track</button>
-      <div className="mt-2 text-xs text-pink-700">{goal} Progress: {progress}%</div>
-      <div className="w-full bg-pink-100 rounded h-2 mt-1"><div className="bg-pink-500 h-2 rounded" style={{width: progress+"%"}} /></div>
+      <input className="w-full border rounded p-2 text-[15px] mb-2" value={goal} onChange={e => setGoal(e.target.value)} />
+      <button 
+        className="bg-pink-600 text-white px-3 py-1.5 rounded text-[15px] disabled:opacity-50" 
+        onClick={handleGenerate}
+        disabled={loading}
+      >
+        {loading ? 'Generating...' : 'Track'}
+      </button>
+      {result && <div className="mt-2 text-[15px] text-pink-700">{result}</div>}
     </div>
   );
 } 

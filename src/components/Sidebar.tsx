@@ -79,7 +79,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   }, [isOpen, loaded]);
 
   // Animation classes
-  const sidebarClass = `fixed top-0 right-0 h-full w-full sm:w-[380px] bg-white shadow-2xl z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} flex flex-col overflow-y-auto`;
+  const sidebarClass = `fixed top-0 right-0 h-full w-full sm:w-[400px] bg-[#f8fafc] shadow-2xl z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} flex flex-col overflow-y-auto`;
 
   // Copy to clipboard
   const handleCopy = () => {
@@ -90,9 +90,29 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
 
   // Quick Actions
   const quickActions = [
-    { label: 'Download Resume', icon: ResumeIcon, onClick: () => alert('Download Resume (mock)') },
-    { label: 'Share Profile', icon: ShareIcon, onClick: () => alert('Share Profile (mock)') },
-    { label: 'View on LinkedIn', icon: LinkedInIcon, onClick: () => window.open('https://linkedin.com', '_blank') },
+    { 
+      label: 'Download Resume', 
+      icon: ResumeIcon, 
+      onClick: () => {
+        // Create a dummy PDF file and trigger download
+        const link = document.createElement('a');
+        link.href = '/resume.pdf'; // You would need to actually have this file in your public folder
+        link.download = 'resume.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+    { 
+      label: 'Share Profile', 
+      icon: ShareIcon, 
+      onClick: () => {
+        const profileUrl = 'https://www.linkedin.com/in/dineshtalwadker/';
+        navigator.clipboard.writeText(profileUrl);
+        alert('Profile link copied to clipboard!');
+      }
+    },
+    { label: 'View on LinkedIn', icon: LinkedInIcon, onClick: () => window.open('https://www.linkedin.com/in/dineshtalwadker/', '_blank') },
   ];
 
   // Profile Stats (mocked)
@@ -104,36 +124,46 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
 
   return (
     <aside ref={sidebarRef} className={sidebarClass} style={{ boxShadow: 'rgba(0,0,0,0.15) -4px 0px 24px 0px' }}>
-      <button
-        aria-label="Close sidebar"
-        onClick={onClose}
-        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full p-2"
-      >
-        <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-      </button>
-      <div className="p-6 flex-1">
+      {/* Sticky AI Header */}
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center gap-3 px-6 py-3 shadow-sm">
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 border border-blue-200">
+          <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#0A66C2" /><ellipse cx="16" cy="20" rx="8" ry="5" fill="#fff" /><circle cx="12" cy="15" r="2" fill="#fff" /><circle cx="20" cy="15" r="2" fill="#fff" /><rect x="14" y="10" width="4" height="2" rx="1" fill="#fff" /><rect x="10" y="23" width="12" height="2" rx="1" fill="#fff" /></svg>
+        </div>
+        <div>
+          <div className="font-bold text-lg text-gray-900 leading-tight">AI Career Assistant</div>
+          <div className="text-xs text-gray-500">Your LinkedIn Copilot</div>
+        </div>
+        <button
+          aria-label="Close sidebar"
+          onClick={onClose}
+          className="ml-auto text-gray-500 hover:text-blue-700 bg-gray-100 rounded-full p-2 transition"
+        >
+          <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div className="p-6 flex-1 space-y-6">
         {/* Mini Profile Card */}
-        <div className="flex flex-col items-center mb-6">
+        <div className="bg-white rounded-xl shadow border border-gray-100 flex flex-col items-center mb-2 py-4 px-4">
           <img src={mockProfileFull.avatarUrl} alt={mockProfileFull.name} className="h-16 w-16 rounded-full border-2 border-blue-200 object-cover mb-2" />
           <div className="font-semibold text-gray-900 text-base text-center">{mockProfileFull.name}</div>
           <div className="text-xs text-gray-500 text-center mb-2">{mockProfileFull.headline}</div>
         </div>
         {/* Quick Actions */}
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="bg-white rounded-xl shadow border border-gray-100 flex justify-center gap-3 py-3 mb-2">
           {quickActions.map((action, i) => (
             <button
               key={action.label}
               onClick={action.onClick}
-              className="flex flex-col items-center text-xs text-gray-700 hover:text-blue-700 focus:outline-none"
+              className="flex flex-col items-center text-xs text-gray-700 hover:text-blue-700 focus:outline-none transition group"
               title={action.label}
             >
-              <span className="mb-1">{action.icon({ className: 'w-5 h-5' })}</span>
-              {action.label}
+              <span className="mb-1 group-hover:scale-110 transition-transform">{action.icon({ className: 'w-5 h-5' })}</span>
+              <span className="font-medium">{action.label}</span>
             </button>
           ))}
         </div>
         {/* Profile Stats */}
-        <div className="flex justify-around mb-6">
+        <div className="bg-white rounded-xl shadow border border-gray-100 flex justify-around py-3 mb-2">
           {stats.map(stat => (
             <div key={stat.label} className="flex flex-col items-center">
               <span className="font-bold text-lg text-blue-700">{stat.value}</span>
@@ -142,101 +172,104 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           ))}
         </div>
         {/* AI Toolbox */}
-        <SidebarSection
-          title="AI Toolbox"
-          content={
-            <div className="space-y-3">
-              {toolboxFeatures.map(feature => (
-                <button
-                  key={feature.key}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-blue-50 transition text-left"
-                  onClick={() => setModal(feature.key)}
-                >
-                  {feature.icon}
-                  <span className="font-medium text-gray-800 text-sm">{feature.label}</span>
-                </button>
-              ))}
-              {/* Modal for feature details */}
-              {modal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-                  <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-xs relative">
-                    <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                      onClick={() => setModal(null)}
-                      aria-label="Close"
-                    >
-                      <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                    </button>
-                    <div className="mb-2">{toolboxFeatures.find(f => f.key === modal)?.icon}</div>
-                    <div className="font-bold text-lg mb-1">{toolboxFeatures.find(f => f.key === modal)?.label}</div>
-                    <div className="text-gray-700 text-sm mb-4">{toolboxFeatures.find(f => f.key === modal)?.desc}</div>
-                    {/* Interactive UI for each feature */}
-                    {modal === 'job-tailoring' && <JobTailoringDemo />}
-                    {modal === 'cover-letter' && <CoverLetterDemo />}
-                    {modal === 'learning-path' && <LearningPathDemo />}
-                    {modal === 'network-gap' && <NetworkGapDemo />}
-                    {modal === 'career-tracker' && <CareerTrackerDemo />}
+        <div className="bg-white rounded-xl shadow border border-gray-100 p-4">
+          <SidebarSection
+            title="AI Toolbox"
+            content={
+              <div className="space-y-3">
+                {toolboxFeatures.map(feature => (
+                  <button
+                    key={feature.key}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-blue-50 focus:ring-2 focus:ring-blue-200 transition text-left"
+                    onClick={() => setModal(feature.key)}
+                  >
+                    {feature.icon}
+                    <span className="font-medium text-gray-800 text-sm">{feature.label}</span>
+                  </button>
+                ))}
+                {/* Modal for feature details */}
+                {modal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm relative border border-blue-100">
+                      <button
+                        className="absolute top-2 right-2 text-gray-500 hover:text-blue-700 bg-gray-100 rounded-full p-1"
+                        onClick={() => setModal(null)}
+                        aria-label="Close"
+                      >
+                        <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                      </button>
+                      <div className="mb-2 flex items-center gap-2">{toolboxFeatures.find(f => f.key === modal)?.icon}<span className="font-bold text-lg">{toolboxFeatures.find(f => f.key === modal)?.label}</span></div>
+                      <div className="text-gray-700 text-sm mb-4">{toolboxFeatures.find(f => f.key === modal)?.desc}</div>
+                      {/* Interactive UI for each feature */}
+                      {modal === 'job-tailoring' && <JobTailoringDemo />}
+                      {modal === 'cover-letter' && <CoverLetterDemo />}
+                      {modal === 'learning-path' && <LearningPathDemo />}
+                      {modal === 'network-gap' && <NetworkGapDemo />}
+                      {modal === 'career-tracker' && <CareerTrackerDemo />}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          }
-        />
-        {/* AI Sections */}
-        <SidebarSection
-          title="AI Career Summary"
-          content={loaded ? (
-            <p className="text-gray-800 text-sm leading-relaxed">{mockAi.summary}</p>
-          ) : (
-            <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse mb-2" />
-          )}
-        />
-        <SidebarSection
-          title="Suggested Next Skill"
-          content={loaded ? (
-            <span className="inline-block bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm cursor-pointer" title="Learning GraphQL will help you become a full-stack engineer.">{mockAi.skill}</span>
-          ) : (
-            <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse mb-2" />
-          )}
-        />
-        <SidebarSection
-          title="Outreach Message"
-          content={loaded ? (
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <button
-                  onClick={handleCopy}
-                  className={`px-3 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium border border-gray-200 hover:bg-gray-200 transition ${copied ? 'bg-green-100 text-green-700' : ''}`}
-                >
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
+                )}
               </div>
-              <textarea
-                className="w-full border border-gray-200 rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
-                rows={3}
-                value={outreach}
-                onChange={e => setOutreach(e.target.value)}
-              />
-            </div>
-          ) : (
-            <div className="h-16 bg-gray-200 rounded animate-pulse mb-2" />
-          )}
-        />
-        <SidebarSection
-          title="Relevant Job Matches"
-          content={loaded ? (
-            <div>
-              {mockAi.jobs.map((job, i) => (
-                <JobCard key={i} title={job.title} link={job.link} />
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <div className="h-8 bg-gray-200 rounded animate-pulse" />
-              <div className="h-8 bg-gray-200 rounded animate-pulse" />
-            </div>
-          )}
-        />
+            }
+          />
+        </div>
+        {/* AI Sections */}
+        <div className="bg-white rounded-xl shadow border border-gray-100 p-4 space-y-6">
+          <SidebarSection
+            title="AI Career Summary"
+            content={loaded ? (
+              <p className="text-gray-800 text-sm leading-relaxed">{mockAi.summary}</p>
+            ) : (
+              <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse mb-2" />
+            )}
+          />
+          <SidebarSection
+            title="Suggested Next Skill"
+            content={loaded ? (
+              <span className="inline-block bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-blue-100 transition" title="Learning GraphQL will help you become a full-stack engineer.">{mockAi.skill}</span>
+            ) : (
+              <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse mb-2" />
+            )}
+          />
+          <SidebarSection
+            title="Outreach Message"
+            content={loaded ? (
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    onClick={handleCopy}
+                    className={`px-3 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium border border-gray-200 hover:bg-blue-100 focus:ring-2 focus:ring-blue-200 transition ${copied ? 'bg-green-100 text-green-700' : ''}`}
+                  >
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                <textarea
+                  className="w-full border border-gray-200 rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  rows={3}
+                  value={outreach}
+                  onChange={e => setOutreach(e.target.value)}
+                />
+              </div>
+            ) : (
+              <div className="h-16 bg-gray-200 rounded animate-pulse mb-2" />
+            )}
+          />
+          <SidebarSection
+            title="Relevant Job Matches"
+            content={loaded ? (
+              <div>
+                {mockAi.jobs.map((job, i) => (
+                  <JobCard key={i} title={job.title} link={job.link} />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="h-8 bg-gray-200 rounded animate-pulse" />
+                <div className="h-8 bg-gray-200 rounded animate-pulse" />
+              </div>
+            )}
+          />
+        </div>
       </div>
     </aside>
   );

@@ -29,8 +29,8 @@ export function Header() {
           <NavItem
             icon={
               <Avatar className="w-6 h-6 border">
-                <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" />
-                <AvatarFallback>AJ</AvatarFallback>
+                <AvatarImage src="https://media.licdn.com/dms/image/v2/D5635AQHPXVgYJZSvfw/profile-framedphoto-shrink_200_200/B56ZY0.wLnGsAY-/0/1744645588073?e=1746828000&v=beta&t=G3XEtmAtFPWjOv5gx72QsiKXdlsi-shEQMOMRwJ7XHo" />
+                <AvatarFallback>DT</AvatarFallback>
               </Avatar>
             }
             label="Me"

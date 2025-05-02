@@ -50,6 +50,7 @@ export interface Interest {
 }
 
 export interface ProfileDataFull {
+  coverImageUrl: string;
   avatarUrl: string;
   name: string;
   headline: string;
@@ -72,16 +73,17 @@ export interface ProfileDataFull {
 }
 
 export const mockProfileFull: ProfileDataFull = {
-  avatarUrl: "/avatar.jpg",
+  coverImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80", // Unsplash office
+  avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg", // Placeholder avatar
   name: "Dinesh Talwadker",
   headline: "Indie hacker building products, experimenting with crypto & AI Agents",
   location: "Ahmedabad, Gujarat, India",
   connections: 2923,
   about: `Hey there! I'm an indie hacker shipping impactful, community-driven products. Currently interning at Zerops, I work on full-stack development, creating technical documentation, manuals, and SDK starter recipes to simplify cloud deployment.\n\nPreviously, I built a shipments app at Delemate, featuring tracking, delivery estimates, payments, inventory management, and more.`,
   featured: [
-    { title: "Projects & Open Source Contributions", type: "link", url: "#", image: "/featured1.png" },
-    { title: "Thrilled to be a finalist at Startup Eummit Bootcamp by IITM", type: "post", url: "#", image: "/featured2.png" },
-    { title: "WON OUR FIRST NATIONAL HACKATHON", type: "post", url: "#", image: "/featured3.png" }
+    { title: "Projects & Open Source Contributions", type: "link", url: "#", image: "https://placehold.co/80x80" },
+    { title: "Thrilled to be a finalist at Startup Eummit Bootcamp by IITM", type: "post", url: "#", image: "https://placehold.co/80x80" },
+    { title: "WON OUR FIRST NATIONAL HACKATHON", type: "post", url: "#", image: "https://placehold.co/80x80" }
   ],
   experience: [
     {
@@ -90,7 +92,7 @@ export const mockProfileFull: ProfileDataFull = {
       duration: "Oct 2023 - Present · 1 yr 8 mos",
       location: "India · Remote",
       description: "Leading teams to build a tournament management platform for gamers.",
-      logoUrl: "/sanity.png"
+      logoUrl: "https://placehold.co/48x48"
     },
     {
       role: "Software Engineer (Intern)",
@@ -98,7 +100,7 @@ export const mockProfileFull: ProfileDataFull = {
       duration: "Nov 2024 - Jan 2025 · 3 mos",
       location: "Prague, Czechia · Remote",
       description: "Full stack development, writing technical blogs, documentation and creating starter recipes (SDKs).",
-      logoUrl: "/zerops.png"
+      logoUrl: "https://placehold.co/48x48"
     },
     {
       role: "Founding Software Engineer",
@@ -106,7 +108,7 @@ export const mockProfileFull: ProfileDataFull = {
       duration: "Nov 2023 - Aug 2024 · 10 mos",
       location: "Hyderabad, Telangana, India · Remote",
       description: "Shipped a cross platform app & backend including live-tracking, chats/groups, order deliveries and estimation.",
-      logoUrl: "/delemate.png"
+      logoUrl: "https://placehold.co/48x48"
     }
   ],
   education: [
@@ -115,14 +117,14 @@ export const mockProfileFull: ProfileDataFull = {
       degree: "Bachelor of Technology",
       field: "Computer Science, Data Science",
       duration: "2020 - 2024",
-      logoUrl: "/gtu.png"
+      logoUrl: "https://placehold.co/48x48"
     },
     {
       school: "SAL COLLEGE OF ENGINEERING (I13)",
       degree: "Bachelor of Technology",
       field: "Computer Science, Data Science",
       duration: "2020 - 2024",
-      logoUrl: "/sal.png"
+      logoUrl: "https://placehold.co/48x48"
     }
   ],
   licenses: [
@@ -145,14 +147,14 @@ export const mockProfileFull: ProfileDataFull = {
       duration: "Oct 2024 - Oct 2024",
       description: "Health, meal plan, workouts & nutrition tracking app with an AI coach.",
       skills: ["React Native", "React.js"],
-      images: ["/aarogya1.png"]
+      images: ["https://placehold.co/48x48"]
     },
     {
       name: "DataCrypt",
       duration: "Sep 2024 - Sep 2024",
       description: "End to end cryptography library implementation in JS.",
       skills: ["REST APIs", "Analytical Skills"],
-      images: ["/datacrypt1.png"]
+      images: ["https://placehold.co/48x48"]
     }
   ],
   volunteering: [
@@ -186,12 +188,12 @@ export const mockProfileFull: ProfileDataFull = {
   ],
   sidebar: {
     peopleAlsoViewed: [
-      { name: "Alapan Das", headline: "J-SDE @Nature Technologies || CS Senior 25 || Fine Tuning...", avatarUrl: "/alapan.png" },
-      { name: "Aniket Pandey", headline: "Student Entrepreneur | Building Sanity Gaming | VC...", avatarUrl: "/aniket.png" }
+      { name: "Alapan Das", headline: "J-SDE @Nature Technologies || CS Senior 25 || Fine Tuning...", avatarUrl: "https://randomuser.me/api/portraits/men/33.jpg" },
+      { name: "Aniket Pandey", headline: "Student Entrepreneur | Building Sanity Gaming | VC...", avatarUrl: "https://randomuser.me/api/portraits/men/34.jpg" }
     ],
     premiumProfiles: [
-      { name: "Alapana Mandapaka", headline: "Certified Carnatic Music Educator | Nurturing Talent...", avatarUrl: "/alapana.png" },
-      { name: "shridevi inremani", headline: "Teacher at Teaching", avatarUrl: "/shridevi.png" }
+      { name: "Alapana Mandapaka", headline: "Certified Carnatic Music Educator | Nurturing Talent...", avatarUrl: "https://randomuser.me/api/portraits/women/35.jpg" },
+      { name: "shridevi inremani", headline: "Teacher at Teaching", avatarUrl: "https://randomuser.me/api/portraits/women/36.jpg" }
     ]
   }
 }; 
